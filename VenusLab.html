@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venus Digital Photo Lab</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            scroll-behavior:smooth;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#050816,#0a1027,#0e1a40,#050816);
+            color:white;
+            overflow-x:hidden;
+        }
+
+        body::before{
+            content:'';
+            position:fixed;
+            width:100%;
+            height:100%;
+            background:
+            radial-gradient(circle at top left, rgba(0,255,255,0.15), transparent 30%),
+            radial-gradient(circle at bottom right, rgba(255,0,255,0.15), transparent 30%),
+            radial-gradient(circle at center, rgba(0,120,255,0.08), transparent 40%);
+            z-index:-1;
+            animation:bgMove 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes bgMove{
+            from{transform:scale(1) rotate(0deg);}
+            to{transform:scale(1.1) rotate(2deg);}
+        }
+
+        nav{
+            position:fixed;
+            top:0;
+            width:100%;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:20px 60px;
+            background:rgba(0,0,0,0.35);
+            backdrop-filter:blur(15px);
+            z-index:999;
+            border-bottom:1px solid rgba(255,255,255,0.1);
+        }
+
+        nav h2{
+            font-size:1.8rem;
+            background:linear-gradient(to right,#00ffff,#ff00ff);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+
+        nav ul{
+            display:flex;
+            gap:30px;
+            list-style:none;
+        }
+
+        nav ul li a{
+            text-decoration:none;
+            color:white;
+            font-weight:500;
+            transition:0.3s;
+            position:relative;
+        }
+
+        nav ul li a::after{
+            content:'';
+            position:absolute;
+            width:0;
+            height:2px;
+            background:cyan;
+            left:0;
+            bottom:-5px;
+            transition:0.3s;
+        }
+
+        nav ul li a:hover::after{
+            width:100%;
+        }
+
+        header{
+            width:100%;
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            flex-direction:column;
+            text-align:center;
+            position:relative;
+            padding:40px;
+        }
+
+        .glow-circle{
+            position:absolute;
+            width:350px;
+            height:350px;
+            border-radius:50%;
+            background:rgba(0,255,255,0.15);
+            filter:blur(100px);
+            animation:float 6s infinite ease-in-out alternate;
+        }
+
+        .glow2{
+            background:rgba(255,0,255,0.15);
+            right:5%;
+            top:10%;
+            animation-delay:2s;
+        }
+
+        .glow1{
+            left:5%;
+            bottom:10%;
+        }
+
+        @keyframes float{
+            from{transform:translateY(-20px);}
+            to{transform:translateY(20px);}
+        }
+
+        h1{
+            font-size:5rem;
+            font-weight:800;
+            background:linear-gradient(to right,#00ffff,#ff00ff,#00aaff);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            animation:textGlow 3s infinite alternate;
+            z-index:10;
+        }
+
+        @keyframes textGlow{
+            from{text-shadow:0 0 20px cyan;}
+            to{text-shadow:0 0 50px magenta;}
+        }
+
+        .subtitle{
+            margin-top:20px;
+            max-width:850px;
+            font-size:1.3rem;
+            color:#d6d6d6;
+            line-height:1.8;
+            z-index:10;
+        }
+
+        .hero-buttons{
+            margin-top:40px;
+            display:flex;
+            gap:20px;
+            flex-wrap:wrap;
+            justify-content:center;
+        }
+
+        .hero-buttons button{
+            padding:15px 35px;
+            border:none;
+            border-radius:50px;
+            cursor:pointer;
+            font-size:1rem;
+            font-weight:600;
+            transition:0.4s;
+        }
+
+        .btn1{
+            background:linear-gradient(45deg,#00ffff,#0066ff);
+            color:white;
+            box-shadow:0 0 20px cyan;
+        }
+
+        .btn2{
+            background:linear-gradient(45deg,#ff00ff,#ff0066);
+            color:white;
+            box-shadow:0 0 20px magenta;
+        }
+
+        .hero-buttons button:hover{
+            transform:translateY(-5px) scale(1.05);
+        }
+
+        section{
+            padding:120px 10%;
+        }
+
+        .section-title{
+            text-align:center;
+            font-size:3rem;
+            margin-bottom:70px;
+            color:white;
+        }
+
+        .cards{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+            gap:35px;
+        }
+
+        .card{
+            background:rgba(255,255,255,0.07);
+            border:1px solid rgba(255,255,255,0.1);
+            backdrop-filter:blur(15px);
+            border-radius:25px;
+            padding:35px;
+            transition:0.5s;
+            position:relative;
+            overflow:hidden;
+        }
+
+        .card::before{
+            content:'';
+            position:absolute;
+            width:150%;
+            height:150%;
+            background:linear-gradient(45deg,transparent,rgba(255,255,255,0.1),transparent);
+            transform:rotate(45deg);
+            top:-120%;
+            left:-120%;
+            transition:1s;
+        }
+
+        .card:hover::before{
+            top:100%;
+            left:100%;
+        }
+
+        .card:hover{
+            transform:translateY(-12px) scale(1.03);
+            box-shadow:0 0 30px rgba(0,255,255,0.3);
+        }
+
+        .card h3{
+            margin-bottom:20px;
+            font-size:1.7rem;
+            color:#00ffff;
+        }
+
+        .card ul{
+            list-style:none;
+            line-height:2;
+            color:#d8d8d8;
+        }
+
+        .contact-box{
+            margin-top:80px;
+            background:rgba(255,255,255,0.06);
+            padding:50px;
+            border-radius:30px;
+            text-align:center;
+            border:1px solid rgba(255,255,255,0.1);
+            box-shadow:0 0 40px rgba(0,255,255,0.15);
+        }
+
+        .contact-box h2{
+            font-size:2.8rem;
+            margin-bottom:20px;
+            color:#00ffff;
+        }
+
+        .contact-box p{
+            margin:15px 0;
+            font-size:1.2rem;
+            color:#d8d8d8;
+        }
+
+        .contact-btn{
+            margin-top:25px;
+            padding:15px 40px;
+            border:none;
+            border-radius:50px;
+            background:linear-gradient(45deg,#00ffff,#0066ff);
+            color:white;
+            font-size:1rem;
+            font-weight:600;
+            cursor:pointer;
+            transition:0.4s;
+            box-shadow:0 0 20px cyan;
+        }
+
+        .contact-btn:hover{
+            transform:scale(1.1);
+        }
+
+        footer{
+            padding:40px;
+            text-align:center;
+            background:black;
+            border-top:1px solid rgba(255,255,255,0.1);
+            color:#999;
+        }
+
+        .particles span{
+            position:absolute;
+            bottom:-150px;
+            width:12px;
+            height:12px;
+            background:rgba(0,255,255,0.5);
+            border-radius:50%;
+            animation:particle 20s linear infinite;
+        }
+
+        .particles span:nth-child(1){left:10%; animation-duration:12s;}
+        .particles span:nth-child(2){left:20%; animation-duration:18s; width:18px; height:18px;}
+        .particles span:nth-child(3){left:30%; animation-duration:15s;}
+        .particles span:nth-child(4){left:40%; animation-duration:20s; width:22px; height:22px;}
+        .particles span:nth-child(5){left:50%; animation-duration:10s;}
+        .particles span:nth-child(6){left:60%; animation-duration:16s;}
+        .particles span:nth-child(7){left:70%; animation-duration:22s; width:20px; height:20px;}
+        .particles span:nth-child(8){left:80%; animation-duration:14s;}
+        .particles span:nth-child(9){left:90%; animation-duration:19s; width:25px; height:25px;}
+
+        @keyframes particle{
+            from{
+                transform:translateY(0) rotate(0deg);
+                opacity:1;
+            }
+            to{
+                transform:translateY(-120vh) rotate(720deg);
+                opacity:0;
+            }
+        }
+
+        @media(max-width:900px){
+
+            h1{
+                font-size:3rem;
+            }
+
+            nav{
+                padding:20px;
+                flex-direction:column;
+                gap:20px;
+            }
+
+            nav ul{
+                flex-wrap:wrap;
+                justify-content:center;
+            }
+
+            .subtitle{
+                font-size:1rem;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="particles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav>
+
+        <h2>Venus Digital Photo Lab</h2>
+
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+
+    </nav>
+
+    <header id="home">
+
+        <div class="glow-circle glow1"></div>
+        <div class="glow-circle glow2"></div>
+
+        <h1>VENUS DIGITAL PHOTO LAB</h1>
+
+        <p class="subtitle">
+            Welcome to the future of digital creativity.
+            We provide premium photo printing,
+            graphic design, editing, branding,
+            photobooks, and high quality digital services
+            with fast delivery and professional results.
+        </p>
+
+        <div class="hero-buttons">
+            <button class="btn1">Explore Services</button>
+            <button class="btn2">Order Now</button>
+        </div>
+
+    </header>
+
+    <section id="services">
+
+        <h2 class="section-title">Our Services</h2>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Graphic Design</h3>
+
+                <ul>
+                    <li>✔ Posters</li>
+                    <li>✔ Logos</li>
+                    <li>✔ Flyers</li>
+                    <li>✔ Social Media Posts</li>
+                    <li>✔ Branding</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Photo Editing</h3>
+
+                <ul>
+                    <li>✔ Retouching</li>
+                    <li>✔ Background Removal</li>
+                    <li>✔ Realistic Effects</li>
+                    <li>✔ AI Enhancements</li>
+                    <li>✔ HD Quality</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Printing Services</h3>
+
+                <ul>
+                    <li>✔ Photo Printing</li>
+                    <li>✔ Photobooks</li>
+                    <li>✔ Stickers</li>
+                    <li>✔ Cards</li>
+                    <li>✔ Fast Delivery</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section id="pricing">
+
+        <h2 class="section-title">Photo Printing Prices (UGX)</h2>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>Standard Photo Prints</h3>
+
+                <ul>
+                    <li>✔ 4x6 — UGX 400</li>
+                    <li>✔ 5x7 — UGX 1,000</li>
+                    <li>✔ 6x8 — UGX 1,500</li>
+                    <li>✔ 8x10 — UGX 3,000</li>
+                    <li>✔ 8x12 — UGX 4,000</li>
+                    <li>✔ 10x12 — UGX 5,000</li>
+                </ul>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Large Size Prints</h3>
+
+                <ul>
+                    <li>✔ 12x16 — UGX 8,000</li>
+                    <li>✔ 12x18 — UGX 10,000</li>
+                    <li>✔ 12x24 — UGX 14,000</li>
+                    <li>✔ 12x32 — UGX 16,000</li>
+                    <li>✔ 12x36 — UGX 20,000</li>
+                </ul>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Photo Books</h3>
+
+                <ul>
+                    <li>✔ 8x8 — UGX 50,000 (20-40 pages)</li>
+                    <li>✔ 8x10 — UGX 70,000 (20-50 pages)</li>
+                    <li>✔ 8x12 — UGX 90,000 (20-60 pages)</li>
+                    <li>✔ 10x10 — UGX 110,000 (20-60 pages)</li>
+                    <li>✔ 10x12 — UGX 130,000 (25-60 pages)</li>
+                    <li>✔ 12x16 — UGX 160,000 (25-70 pages)</li>
+                    <li>✔ 13x19 Non-Tearable — UGX 200,000 (25-50 pages)</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section id="contact">
+
+        <div class="contact-box">
+
+            <h2>Contact Venus Digital Photo Lab</h2>
+
+            <p>
+                📞 Phone:
+                <a href="tel:0755385001"
+                style="color:cyan;text-decoration:none;">
+                0755385001
+                </a>
+            </p>
+
+            <p>
+                📧 Email:
+                <a href="mailto:venusdigitallab@gmail.com"
+                style="color:#ff66ff;text-decoration:none;">
+                venuskumarv1@gmail.com
+                </a>
+            </p>
+
+            <p>📍 Wilson Street, Jesco Plaza, Room Number CC21</p>
+
+            <button class="contact-btn">
+                Call Now
+            </button>
+
+        </div>
+
+    </section>
+
+    <footer>
+        © 2026 Venus Digital Photo Lab | Premium Digital Photo Services Uganda
+    </footer>
+
+    <script>
+
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+
+            card.addEventListener('mousemove', e => {
+
+                const rect = card.getBoundingClientRect();
+
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                card.style.background = `
+                    radial-gradient(circle at ${x}px ${y}px,
+                    rgba(0,255,255,0.25),
+                    rgba(255,255,255,0.05))`;
+
+            });
+
+            card.addEventListener('mouseleave', () => {
+
+                card.style.background =
+                'rgba(255,255,255,0.07)';
+
+            });
+
+        });
+
+        const title = document.querySelector('h1');
+
+        setInterval(() => {
+
+            title.style.transform =
+            `scale(${1 + Math.random() * 0.03})`;
+
+        },500);
+
+    </script>
+
+</body>
+</html>
